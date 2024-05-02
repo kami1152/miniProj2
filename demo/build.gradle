@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.5'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.0.6'
+	id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.example'
@@ -24,7 +24,6 @@ repositories {
 dependencies {
 	
 	//implementation 'org.springframework.boot:spring-boot-starter-security'
-
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 	compileOnly 'org.projectlombok:lombok'
@@ -35,16 +34,20 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-
-
-
 	//springboot jsp insert
 	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-    implementation 'jakarta.servlet:jakarta.servlet-api:6.0.0' // 현재 버전 기준
+	implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+
+
+    implementation 'jakarta.servlet:jakarta.servlet-api' // 현재 버전 기준
     implementation 'org.glassfish:jakarta.faces:3.0.1' // JSF API
     implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:2.0.0'
     implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:2.0.0'
 
+
+	//spring security
+	implementation "org.springframework.boot:spring-boot-starter-security"
+	implementation 'org.springframework.security:spring-security-taglibs'
 
 	//Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'

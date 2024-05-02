@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.mapper.CodeMapper;
 import com.example.demo.vo.CodeVO;
+import com.example.demo.vo.UserVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +17,7 @@ public class CodeService {
     
     public List<CodeVO> getList(){
         List<CodeVO> list = codeMapper.getList();
-        System.out.println("codelist : " + list);
+        //System.out.println("codelist : " + list);
         return list;
     }
 

@@ -25,8 +25,6 @@ public class BoardService {
 
         List<BoardVO> list = boardMapper.getList(pageRequestVO);
 
-    
-
         int total = boardMapper.boardCount();
         System.out.println(total);
     
@@ -37,7 +35,7 @@ public class BoardService {
                 .pageNo(pageRequestVO.getPageNo())
                 .build();
 
-        System.out.println(pageResponseVO.getStart());
+        //System.out.println(pageResponseVO.getStart());
 
         return pageResponseVO;
 

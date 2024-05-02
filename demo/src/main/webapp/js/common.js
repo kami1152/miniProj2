@@ -42,18 +42,26 @@ handler : 서버에서 결과를 전달해주면 받아서 처리하는 함수
 */
 
 const myFetch = (url, formId, handler) => {
- const param = typeof formId == "string" ? formToSerialize(formId) : JSON.stringify(formId);
- fetch(url, {
+   const param = typeof formId == "string" ? formToSerialize(formId) : JSON.stringify(formId);
+   const csrf = document.querySelector("meta[name='_csrf']");
+   const csrf_header = document.querySelector("meta[name='_csrf_header']");
+   const csrfToken = csrf ? csrf.content : null;
+   const csrfHeader = csrf_header ? csrf_header.content : null;
+   const headers = {"Content-type" : "application/json; charset=utf-8"};
+   if (csrfToken) {
+      headers[csrfHeader] = csrfToken 
+   }
+   console.log("headers", headers)
+   fetch(url, {
          method:"POST",
          body : param,
-         headers : {"Content-type" : "application/json; charset=utf-8"}
- }).then(res => res.json()).then(json => {
-     //서버로 부터 받은 결과를 사용해서 처리 루틴 구현  
-     console.log("json ", json );
-     if (handler) handler(json);
- });	
+         headers : headers
+   }).then(res => res.json()).then(json => {
+      //서버로 부터 받은 결과를 사용해서 처리 루틴 구현  
+      console.log("json ", json );
+      if (handler) handler(json);
+   });   
 }
-
 
 
 const menuActive = link_id => {

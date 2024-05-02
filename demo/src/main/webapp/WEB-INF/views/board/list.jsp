@@ -1,6 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     
 
@@ -10,6 +8,8 @@
 <meta charset="UTF-8">
 <%@ include file="/WEB-INF/views/include/css.jsp" %>
 <%@ include file="/WEB-INF/views/include/js.jsp" %>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.min.js" ></script>
 <title>Test</title>
 </head>
 <body>
@@ -28,9 +28,6 @@
     	<input type="text" id="searchKey" name="searchKey" value="${param.searchKey}">
         <button type="submit" class="btn btn-dark">검색</button>
     </form>
-
-
-
 
     <table class ="table caption-top table-bordered table-hover" >
         <caption>게시글 목록</caption> 

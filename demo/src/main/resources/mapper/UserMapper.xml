@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <mapper namespace="com.example.demo.mapper.UserMapper">
+
+
+    <sql id="search">
+      <where>
+        <if test="searchKey != null and searchKey != ''">
+          <choose>
+            <when test="searchType == '아이디'">
+              member_id like concat('%', #{searchKey} , '%')
+            </when>
+            <when test="searchType == '성별'">
+              member_gender like concat('%', #{searchKey} , '%')
+            </when>
+            <when test="searchType == '전화번호'">
+              member_phone_number like concat('%', #{searchKey} , '%')
+            </when>
+            <when test="searchType == '권한'">
+              member_roles like concat('%', #{searchKey} , '%')
+            </when>
+            <when test="searchType == '잠금여부'">
+              member_account_locked like concat('%', #{searchKey} , '%')
+            </when>
+          </choose>
+         </if>
+      </where>
+    </sql>
+
+    <select id="getView" resultType="UserVO">
+      select 
+			*  , p.member_privilege
+		  from tb_member m
+      join tb_privilege p on m.member_id = p.member_id
+		  where m.member_id = #{member_id}
+    </select>
+
+    <select id="getList"
+            resultType="UserVO">
+            select *
+            from tb_member
+            <include refid="search"></include>
+    </select>
+
+
+
+
+    <select id="LockUserList" resultType="UserVO">
+      select * from tb_member
+      where member_account_locked = 'Y'
+    </select>
+
+    <select id="login" resultType="UserVO">
+      select 
+			* 
+		  from tb_member
+		  where member_id = #{member_id}
+    </select>
+
+    <update id="unlockUserLogin">
+      update tb_member set
+      member_account_locked = 'N',
+      member_login_count = 0 
+      where  member_id = #{member_id} 
+    </update>
+
+    <update id="loginCountInc">
+      update tb_member set 
+        member_login_count = member_login_count + 1
+        <choose>
+          <when test="member_login_count > 3">
+            , member_account_locked = 'Y'
+          </when>
+          <otherwise>
+            , member_account_locked = 'N'
+          </otherwise>
+        </choose>
+      where member_id = #{member_id} 
+    </update> 
+
+
+    <update id="loginCountClear">
+      update tb_member set 
+         member_login_count = 0 
+        ,member_account_locked = 'N'
+      where member_id = #{member_id} 
+    </update> 
+
+    <update id="updateMemberLastLogin">
+      update tb_member set 
+        member_last_login_time = now()
+      where member_id = #{member_id}  
+    </update>
+    
+    <select id="checkID" resultType="UserVO">
+      select *
+      from tb_member
+      where member_id = #{member_id} 
+    </select>
+
+    <select id="gethobbyList" resultType="UserHobbyVO">
+      select hobbyname
+      from tbhobby
+    </select>
+
+    <insert id="register">
+      insert into tb_member (
+        member_id,
+        member_pwd,
+        member_name,
+        member_address,
+        member_phone_number,
+        member_gender
+
+      )
+      values (
+        #{member_id},
+        #{member_pwd},
+        #{member_name},
+        #{member_address},
+        #{member_phone_number},
+        #{member_gender}
+      )
+    </insert>
+
+    <insert id="reg_userhobby">
+      insert into userhobby(
+        user_id,
+        hobby
+      )
+      VALUES (
+        #{member_id},
+        #{item}
+      )
+    </insert>
+
+    <delete id="delete">
+      delete
+      from tb_member
+      where member_id = #{value}
+    </delete>
+</mapper>
+        
