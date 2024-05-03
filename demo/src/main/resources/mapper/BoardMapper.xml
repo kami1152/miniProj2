@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
     </select>
 
    <insert id="filesaver">
-    insert into tb_customfile (
+    insert into tb_board_file (
         bno,
         uploadPath,
         filename
@@ -44,10 +44,14 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         #{bno},
         #{uploadPath},
         #{filename}
-    );
+    )
+
    </insert> 
 
     <insert id="insert">
+        <selectKey order="AFTER" keyProperty="bno" resultType="int">
+            select LAST_INSERT_ID()
+         </selectKey>
         insert into tb_board (
             btitle,
             bcontent,
@@ -57,6 +61,7 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
             #{bcontent},
             #{member_id}
         )
+        
     </insert>
 
     <select id="getBoardNumber" resultType="BoardVO">
@@ -64,4 +69,18 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         from tb_board
         where btitle = #{value}
     </select>
+
+    <select id="getView" resultType="BoardVO">
+        select *
+        from tb_board
+        where bno = #{value}
+    </select>
+
+
+    <select id="getFilename" resultType="FileVO">
+        select bno, uploadPath, filename
+        from tb_board_file
+        where bno = #{bno}
+    </select>
+
 </mapper>

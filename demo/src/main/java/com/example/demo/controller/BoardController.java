@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,13 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.demo.mapper.BoardMapper;
 import com.example.demo.service.BoardService;
 import com.example.demo.service.CodeService;
+import com.example.demo.util.FileDownloadUitl;
 import com.example.demo.vo.BoardVO;
 import com.example.demo.vo.FileVO;
 import com.example.demo.vo.PageRequestVO;
 import com.example.demo.vo.UserVO;
 
+import java.io.IOException;
 import java.util.*;
 
 import jakarta.validation.Valid;
@@ -34,6 +38,8 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
     private final CodeService codeService;
+
+    //private final FileDownloadUitl fileDownloadUitl;
 
     // BoardMapper boardMapper;
     @RequestMapping("/list")
@@ -73,17 +79,17 @@ public class BoardController {
         System.out.println("Content: " + content);
         System.out.println("username: " + username);
         System.out.println("Number of files: " + files.length);
-        BoardVO boardVO = boardService.insert(title, content, username);
-        if (boardVO != null) {
+        int boardVO = boardService.insert(title, content, username);
+        System.out.println("this ready " + boardVO);
+        if (boardVO > 0) {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    boardService.insertfile(String.valueOf(boardVO.getBno()), file);
+                    boardService.insertfile(title, file);
                 }
             }
         }
-        System.out.println(boardVO);
 
-        if (boardVO != null) {
+        if (boardVO > 0) {
             map.put("status", 0);
             map.put("msg", "작성에 성공하였습니다.");
         } else {
@@ -91,6 +97,65 @@ public class BoardController {
             map.put("msg", "작성에 실패하였습니다.");
         }
         return map;
+    }
+
+
+    @RequestMapping("/BoardInfo")
+    @ResponseBody
+    public Map<String, Object> insert(@RequestBody BoardVO boardVO) {
+
+        Map<String, Object> map = new HashMap<>();
+
+        BoardVO board = boardService.getView(boardVO.getBno());
+
+        FileVO fileVO = boardService.getFilename(boardVO.getBno());
+
+        System.out.println(boardVO);
+        System.out.println(fileVO);
+
+        if(fileVO != null){
+            map.put("jsonFile",fileVO);
+        }   else{
+            map.put("jsonFile",null);
+        }
+
+        if(board != null){
+            map.put("status",0);
+            map.put("jsonBoard",board);
+        }else{
+            map.put("status", 99);
+            map.put("msg", "good");
+        }
+        return map;
+    }
+
+
+    @RequestMapping("/download")
+    @ResponseBody
+    public ResponseEntity<Resource> download(
+        @RequestParam("bno") String bno,
+        @RequestParam("filename") String filename
+    ) {
+
+        FileVO file = boardService.getFilename(Integer.parseInt(bno));
+        //System.out.println(file);
+        try {
+            FileDownloadUitl fileDownloadUitl = new FileDownloadUitl();
+
+            ResponseEntity<Resource> temp =  fileDownloadUitl.downloadFile(file);
+            System.out.println("good " +temp);
+
+            return temp;
+        }  catch (RuntimeException e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound()
+                                 .build();
+        } catch(IOException e){
+            e.printStackTrace();
+            return ResponseEntity.notFound()
+            .build();
+        }
+
     }
 
 }

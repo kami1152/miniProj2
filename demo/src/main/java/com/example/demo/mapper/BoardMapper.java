@@ -14,6 +14,9 @@ public interface BoardMapper {
     public List<BoardVO> getList(PageRequestVO pageRequestVO);
     public int insert(BoardVO boardVO);
     public BoardVO getBoardNumber(String name);
-    public int filesaver(FileVO newfile);
+    public int filesaver(FileVO file);
+
+    public BoardVO getView(int bno);
+    public FileVO getFilename(int bno);
     
 }

@@ -39,7 +39,7 @@
         </tr>
         <c:forEach var="board" items="${pageResponseVO.list}">
         <tr >
-            <td style="cursor:pointer;"><a data-bs-toggle="modal" data-bs-target="#boardViewModel" data-bs-bno="${board.bno}">${board.bno}</a></td>
+            <td style="cursor:pointer;"><a data-bs-toggle="modal" data-bs-target="#ViewModel" data-bs-bno="${board.bno}">${board.bno}</a></td>
             <td>${board.btitle}</td>
             <td>${board.member_id}</td>
             <td>${board.bdate}</td>
@@ -49,9 +49,45 @@
 
 
     <form id="insertForm" action="insertForm" method="post" action="board.do">
-		<input type="button" value="등록"
+		<input type="button" class="btn btn-secondary" value="등록"
 			onclick="jsinsertForm()" class="custom-button">
 	</form>
+
+
+    
+
+
+    <!-- 상세보기 Modal -->
+    <div class="modal fade" id="ViewModel" role="dialog">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">상세정보</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label>number: </label><span id="bno"></span><br/>
+                <label>title : </label><span id="btitle"></span><br/>
+                <label>작성자 :</label><span id="member_id"></span><br/>
+                <label>작성날짜 : </label><span id="bdate"></span><br/>
+                <label>조회수 : </label><span id="view_count"></span><br/>
+                <label>내용 : </label><span id="bcontent"></span><br/>
+                <label>첨부파일 : </label><span id="filename"></span><br/>
+                 <button onclick="download()" class="btn btn-secondary">다운로드</button><br/>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
 
 	<div class="float-end">
 		<ul class="pagination flex-wrap">
@@ -73,7 +109,115 @@
 	</div>
 
 
+
+
+
+
 <!--script sector-->
+
+<script>
+    function download() {
+
+    const file_bno = document.getElementById("bno").textContent; // #bno로 id 접근, textContent 사용
+    const file_filename = document.getElementById("filename").textContent; // #filename으로 id 접근, textContent 사용
+    const formData = new FormData();
+    formData.append("bno", file_bno);
+    formData.append("filename", file_filename);
+
+    fetch("download",
+        {
+        method : 'POST',
+        body: formData
+        })
+        .then(
+            response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.blob();}
+        )
+        .then(blob => {
+
+            const url = window.URL.createObjectURL(blob); // Blob을 URL로 변환
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = file_filename; // 파일 이름 설정
+            document.body.appendChild(a);
+            a.click(); // 클릭하여 다운로드 실행
+            window.URL.revokeObjectURL(url); // URL 해제
+
+        }).catch(
+          (error) =>{
+                alert("error");
+          });
+    }
+</script>
+
+
+<script type="text/javascript">
+    const span_ViewModel = document.querySelector("#ViewModel");
+    const span_bno = document.querySelector(".modal-body #bno");
+    const span_btitle = document.querySelector(".modal-body #btitle");
+    const span_member_id = document.querySelector(".modal-body #member_id");
+    const span_bdate = document.querySelector(".modal-body #bdate");
+    const span_view_count = document.querySelector(".modal-body #view_count");
+    const span_bcontent = document.querySelector(".modal-body #bcontent");
+    const span_filename = document.querySelector(".modal-body #filename");
+    ViewModel.addEventListener('shown.bs.modal', function (event) {
+        const a = event.relatedTarget;
+        const bno = a.getAttribute('data-bs-bno'); //a.dataset["bs-bno"] //, a.dataset.bs-bno 사용안됨
+        console.log("모달 대화 상자 출력... member_id ", member_id);
+        
+        span_bno.innerText = "";
+        span_btitle.innerText = "";
+        span_member_id.innerText = "";
+        span_bdate.innerText = "";
+        span_view_count.innerText = "";
+        span_bcontent.innerText = "";
+        span_filename.innerText = "";
+
+        const custom_param = {
+            action : ""
+        }
+
+        fetch("BoardInfo",{
+            method : 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ bno: bno })
+        }).then(res => res.json())
+        .then(json=>{
+
+            if(json.status == 0){
+            
+                const jsonBd = json.jsonBoard;
+                const file = json.jsonFile;
+                if(file != null){
+                    span_filename.innerText = file.filename;
+                }
+                span_bno.innerText = jsonBd.bno;
+                span_btitle.innerText = jsonBd.btitle;
+                span_member_id.innerText = jsonBd.member_id;
+                span_bdate.innerText = jsonBd.bdate;
+                span_view_count.innerText = jsonBd.view_count;
+                span_bcontent.innerText = jsonBd.bcontent;
+                
+            }else{
+                alert("model set failed");
+            }
+        }).catch(
+            (e) =>{
+                alert("error");
+            })
+    });
+</script>
+
+
+
+
+
 <script>
     document.querySelector(".pagination").addEventListener("click", function (e) {
     e.preventDefault()

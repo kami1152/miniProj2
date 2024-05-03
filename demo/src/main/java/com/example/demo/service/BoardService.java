@@ -43,35 +43,42 @@ public class BoardService {
 
     }
 
-    public BoardVO insert(String title, String content, String username) {
+    public int insert(String title, String content, String username) {
         BoardVO boardVO = new BoardVO();
-
+        System.out.println("flag 1");
         boardVO.setBtitle(title);
         boardVO.setBcontent(content);
         boardVO.setMember_id(username);
-
-        int n = boardMapper.insert(boardVO);
-        BoardVO newboardVO = boardMapper.getBoardNumber(title);
-        if(n>0){
-            return newboardVO;
-        }
-        return null;
+        System.out.println("flag 2");
+        int temp =boardMapper.insert(boardVO);
+        System.out.println("temp:" + temp);
+        return temp;
     }
 
-    public int insertfile(String bno, MultipartFile file) {
+    public int insertfile(String title, MultipartFile file) {
        
         FileSaveUtil fileSaveUtil = new FileSaveUtil();
         //local save
-        FileVO newfile = fileSaveUtil.fileSaver(bno, file);
+        BoardVO bnos = boardMapper.getBoardNumber(title);
+        int bno  = bnos.getBno();
+        FileVO newfile = fileSaveUtil.fileSaver(String.valueOf(bno), file);
       
-        if(newfile == null){
-            return 0;
-        }else{
-            newfile.setFilename(file.getOriginalFilename());
-        }
+    
+        newfile.setFilename(file.getOriginalFilename());
+        System.out.println("newfile -> " + newfile);
         int n = boardMapper.filesaver(newfile);
        
         return n;
+    }
+
+    public BoardVO getView(int bno) {
+        BoardVO board = boardMapper.getView(bno);
+        return board;
+    }
+
+    public FileVO getFilename(int bno) {
+        FileVO file = boardMapper.getFilename(bno);
+        return file;
     }
 
 

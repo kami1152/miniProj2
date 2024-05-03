@@ -37,7 +37,7 @@ public class FileSaveUtil implements LocalUrl {
             e.printStackTrace();
         }
 
-        custom.setBno(bno);
+        custom.setBno(Integer.parseInt(bno));
         custom.setUploadPath(fileName);
 
         return custom;
