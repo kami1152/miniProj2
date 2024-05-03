@@ -13,14 +13,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BoardVO {
 	
-	private String bno;
+	private int bno;
 	private String btitle;
 	private String bcontent;
 	private String member_id;
 	private String bdate;
 	private String view_count;
-    
-	private String bwriter;
+ 
 	// //게시물 토큰 변수 선언 
 	// private String board_token;
 	

@@ -34,4 +34,34 @@ PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
         <include refid="search"/>
 		order by bno desc limit #{skip}, #{size}
     </select>
+
+   <insert id="filesaver">
+    insert into tb_customfile (
+        bno,
+        uploadPath,
+        filename
+    ) values(
+        #{bno},
+        #{uploadPath},
+        #{filename}
+    );
+   </insert> 
+
+    <insert id="insert">
+        insert into tb_board (
+            btitle,
+            bcontent,
+            member_id
+        ) values (
+            #{btitle},
+            #{bcontent},
+            #{member_id}
+        )
+    </insert>
+
+    <select id="getBoardNumber" resultType="BoardVO">
+        select *
+        from tb_board
+        where btitle = #{value}
+    </select>
 </mapper>

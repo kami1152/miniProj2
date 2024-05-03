@@ -45,7 +45,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(authorize -> authorize
                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                .requestMatchers("/css/**", "/js/**","/","/user/**").permitAll()
+                .requestMatchers("/css/**", "/js/**","/**","/user/**").permitAll()
                 .anyRequest().authenticated()) 
             .formLogin(login -> login
                 .usernameParameter("email")

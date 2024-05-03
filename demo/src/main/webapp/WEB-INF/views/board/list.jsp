@@ -48,10 +48,9 @@
     </table>
 
 
-    <form id="insertForm" method="post" action="board.do">
-		<input type="hidden" id="action" name="action" value="insertForm">
+    <form id="insertForm" action="insertForm" method="post" action="board.do">
 		<input type="button" value="등록"
-			onclick="jsinsertForm('${loginVO.user_id}')" class="custom-button">
+			onclick="jsinsertForm()" class="custom-button">
 	</form>
 
 	<div class="float-end">
@@ -97,7 +96,11 @@ document.querySelector("#size").addEventListener("change", e => {
     searchForm.submit();
 });
 
+function jsinsertForm(){
 
+    alert(insertForm.action);
+    insertForm.submit();
+}
 
 </script>
 
