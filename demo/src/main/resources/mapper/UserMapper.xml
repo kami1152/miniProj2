@@ -31,10 +31,9 @@
 
     <select id="getView" resultType="UserVO">
       select 
-			*  , p.member_privilege
-		  from tb_member m
-      join tb_privilege p on m.member_id = p.member_id
-		  where m.member_id = #{member_id}
+			* 
+		  from tb_member
+		  where member_id = #{member_id}
     </select>
 
     <select id="getList"
