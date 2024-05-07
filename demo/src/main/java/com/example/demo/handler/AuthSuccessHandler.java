@@ -26,7 +26,10 @@ public class AuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                                                                                                     // 객체
     ) throws IOException, ServletException {
 
-       
+
+
+        
+       //주석 추가~
         userMapper.updateMemberLastLogin(authentication.getName());
         userMapper.loginCountClear(authentication.getName());
 

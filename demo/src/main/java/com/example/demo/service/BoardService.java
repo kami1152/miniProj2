@@ -30,6 +30,9 @@ public class BoardService {
         int total = boardMapper.boardCount();
         System.out.println(total);
 
+
+        
+
         PageResponseVO<BoardVO> pageResponseVO = PageResponseVO.<BoardVO>withAll()
                 .list(list)
                 .total(total)
