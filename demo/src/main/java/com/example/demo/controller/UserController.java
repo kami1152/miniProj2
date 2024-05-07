@@ -78,10 +78,8 @@ public class UserController {
     // public void getLoginview(Model model, @RequestParam(value = "error", required
     // = false)String error,
     // @RequestParam(value = "exception", required = false) String exception ){
-
     // model.addAttribute("error", error);
     // model.addAttribute("exception", exception);
-
     // }
 
 }

@@ -15,7 +15,7 @@ public class UserSchedulingHandler {
     
     private final UserService userService;
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 600000)
     public void unlockUserLogin(){
         System.out.println("user login unlock process start");
         userService.unlockUserLogin();

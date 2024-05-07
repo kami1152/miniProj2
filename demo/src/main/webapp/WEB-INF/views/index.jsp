@@ -9,6 +9,14 @@
 </head>
 <body>
 	<h1>Main Page</h1>      
-    <a href="/board/list">test Book</a>  
+    <%@ include file="/WEB-INF/views/include/header.jsp" %>
+    <a href="/board/list">Start</a>  
+    <a href="/temp1">temp2</a>  
+    <br/>
+    <img src="img/sr1.png">
+    <img src="img/sr2.png">
+    <img src="img/sr3.png">
+    <img src="img/sr4.png">
+    <img src="img/sr5.png">
 </body>
 </html>

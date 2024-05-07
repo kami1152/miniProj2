@@ -61,5 +61,30 @@ uri="http://java.sun.com/jsp/jstl/core" %>
             loginForm.submit();
         });
     </script>
+
+<script type="text/javascript">
+  window.onload = function() {
+      // URL에서 쿼리 문자열을 파싱하는 함수
+      function getParameterByName(name, url = window.location.href) {
+          name = name.replace(/[\[\]]/g, '\\$&');
+          var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+              results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, ' '));
+      }
+  
+      // 'error'와 'exception' 파라미터를 확인
+      var error = getParameterByName('error');
+      var exception = getParameterByName('exception');
+  
+      // error가 true이고, exception 메시지가 "계정이 잠겼습니다"인 경우 alert 표시
+      if (error === 'true' && exception === '계정이 잠겼습니다') {
+          alert('계정이 잠겼습니다');
+      }
+
+  };
+
+  </script>
   </body>
 </html>

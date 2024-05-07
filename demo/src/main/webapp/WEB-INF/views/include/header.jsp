@@ -7,7 +7,7 @@ uri="http://www.springframework.org/security/tags" %>
   <sec:authentication property="principal" var="principal" />
 </sec:authorize>
 
-<ul class="nav nav-pills nav-justified">
+<ul class="nav nav-pills nav-justified nav-dark">
   <li class="nav-item">
     <a class="nav-link" href="<c:url value='/'/>" id="home_link">회사소개</a>
   </li>
