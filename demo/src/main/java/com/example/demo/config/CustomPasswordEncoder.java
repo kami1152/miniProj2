@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CustomPasswordEncoder implements PasswordEncoder {
+    //컴포넌트는 시스템 실행시 등록된다.
     @Override
     public String encode(CharSequence rawPassword) {
         // BCryptPasswordEncoder를 이용하여 비밀번호를 암호화
